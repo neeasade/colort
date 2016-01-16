@@ -3,14 +3,17 @@
 A small program for 'tinting' colors by values.
 
 ``` sh
-$ colort 2 "#000000"
+$ colort -t 2 -c "#000000"
 #222222
+$ colort -l upper -t 2 -c "#ffffff"
+#ffffff
 ```
 
 
 ### TODO ###
 
-- [ ] add --upper and --lower flags to set boundries (eg `colort --upper 3 "ffffff" --> ffffff`)
+- [x] add --upper and --lower flags to set boundries (eg `colort --upper 3 "ffffff" --> ffffff`)
+	- [  ] should this be automatic depending on tint direction?
 - [ ] make values be toggled on their own (eg `colort 1 000000 --> 010101`)
-- [ ] proper args and usage
+- [x] proper args and usage
 - [ ] --invert option.

@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     int i=0;
     char *limit;
-    char *limitCompare;
+    char limitCompare[5] = "none";
     int index = 0;
     int tintValue = 0;
     int original = 0;
@@ -76,11 +76,11 @@ int main(int argc, char *argv[])
             index = index % 16;
 
             strcpy(limitCompare, "upper");
-            if(strcmp(limit, limitCompare) == 0 && index > original)
+            if(strcmp(limit, limitCompare) == 0 && index < original)
                 index = 15;
 
             strcpy(limitCompare, "lower");
-            if(strcmp(limit, limitCompare) == 0 && original > index)
+            if(strcmp(limit, limitCompare) == 0 && original < index)
                 index = 0;
 
             colorString[i] = colorValues[index];
