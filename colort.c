@@ -1,26 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[])
 {
     int i=0;
-    char limit[20];
-    char limitCompare[20];
-    int index;
-    int original;
+    char *limit;
+    char *limitCompare;
+    int index = 0;
+    int tintValue = 0;
+    int original = 0;
     char *colorValues="0123456789abcdef";
+    char *colorString;
 
-    // Args.
-    if (argc == 4)
-        strcpy(limit, argv[++i]);
 
-    int changeValue = atoi(argv[++i]); // value to change color value by.
-    char *color = argv[++i];
+    // -l (limit), -t (tint value), -c (color string)
+    while ((i = getopt  (argc, argv, "lt:c:")) != -1)
+        switch(i)
+        {
+            case 'l':
+                limit = optarg; break;
+            case 't':
+                tintValue = atoi(optarg); break;
+            case 'c':
+                colorString = optarg; break;
+            default:
+                abort();
+        }
 
-    for (i = 0; color[i] != 0; i++)
+    for (i = 0; colorString[i] != 0; i++)
     {
-        switch(color[i])
+        switch(colorString[i])
         {
             case '0':
             case '1':
@@ -31,7 +42,7 @@ int main(int argc, char *argv[])
             case '6':
             case '7':
             case '8':
-            case '9': index = color[i] - '0'; break;
+            case '9': index = colorString[i] - '0'; break;
 
             case 'a':
             case 'A': index = 10; break;
@@ -55,15 +66,16 @@ int main(int argc, char *argv[])
         }
 
         original = index;
-        if ( index != -1 )
+        if (index != -1)
         {
-            index += changeValue;
+            index += tintValue;
 
             while(index < 0)
                 index += 16;
 
-            index=index%16;
+            index = index % 16;
 
+            /*
             strcpy(limitCompare, "--upper");
             if(strcmp(limit, limitCompare) == 0 && index > original)
                 index = 15;
@@ -71,11 +83,12 @@ int main(int argc, char *argv[])
             strcpy(limitCompare, "--lower");
             if(strcmp(limit, limitCompare) == 0 && original > index)
                 index = 0;
+            */
 
-            color[i] = colorValues[index];
+            colorString[i] = colorValues[index];
         }
     }
 
-    printf("%s\n",color);
+    printf("%s\n", colorString);
     return 0;
 }
