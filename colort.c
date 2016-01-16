@@ -31,36 +31,36 @@ int main(int argc, char *argv[])
             case '6':
             case '7':
             case '8':
-            case '9': index=color[i] - '0'; break;
+            case '9': index = color[i] - '0'; break;
 
             case 'a':
-            case 'A': index=10; break;
+            case 'A': index = 10; break;
 
             case 'b':
-            case 'B': index=11; break;
+            case 'B': index = 11; break;
 
             case 'c':
-            case 'C': index=12; break;
+            case 'C': index = 12; break;
 
             case 'd':
-            case 'D': index=13; break;
+            case 'D': index = 13; break;
 
             case 'e':
-            case 'E': index=14; break;
+            case 'E': index = 14; break;
 
             case 'f':
-            case 'F': index=15; break;
+            case 'F': index = 15; break;
 
-            default: index=-1; break;
+            default: index = -1; break;
         }
 
         original = index;
         if ( index != -1 )
         {
-            index+=changeValue;
+            index += changeValue;
 
-            while(index<0)
-                index+=16;
+            while(index < 0)
+                index += 16;
 
             index=index%16;
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
             if(strcmp(limit, limitCompare) == 0 && original > index)
                 index = 0;
 
-            color[i]=colorValues[index];
+            color[i] = colorValues[index];
         }
     }
 
