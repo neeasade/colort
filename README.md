@@ -9,5 +9,5 @@ $ #222222
 
 todo:
 
-[  ] add --upper and --lower flags to set boundries
-[  ] make values be toggled on theyr own (eg colort 1 000000 --> 010101)
+- [ ] add --upper and --lower flags to set boundries
+- [ ] make values be toggled on theyr own (eg colort 1 000000 --> 010101)
