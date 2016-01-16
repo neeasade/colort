@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
 
     // -l (limit), -t (tint value), -c (color string)
-    while ((i = getopt  (argc, argv, "lt:c:")) != -1)
+    while ((i = getopt  (argc, argv, "l:t:c:")) != -1)
         switch(i)
         {
             case 'l':
@@ -75,15 +75,13 @@ int main(int argc, char *argv[])
 
             index = index % 16;
 
-            /*
-            strcpy(limitCompare, "--upper");
+            strcpy(limitCompare, "upper");
             if(strcmp(limit, limitCompare) == 0 && index > original)
                 index = 15;
 
-            strcpy(limitCompare, "--lower");
+            strcpy(limitCompare, "lower");
             if(strcmp(limit, limitCompare) == 0 && original > index)
                 index = 0;
-            */
 
             colorString[i] = colorValues[index];
         }
