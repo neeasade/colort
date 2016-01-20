@@ -6,28 +6,26 @@
 int main(int argc, char *argv[])
 {
     int i=0;
-    char *limit;
-    char limitCompare[5] = "none";
     int index = 0;
     int tintValue = 0;
     int original = 0;
     char *colorValues="0123456789abcdef";
     char *colorString;
 
+    // 1 for -l (limit), -1 for -i (invert)
+    int optionSwitch=0;
 
-    // -l (limit), -t (tint value), -c (color string)
-    while ((i = getopt  (argc, argv, "l:t:c:")) != -1)
-        switch(i)
-        {
-            case 'l':
-                limit = optarg; break;
-            case 't':
-                tintValue = atoi(optarg); break;
-            case 'c':
-                colorString = optarg; break;
-            default:
-                abort();
-        }
+    // you're not going to specify -i and -l
+    if (argc == 4){
+        if (strcmp(argv[1], "-l") == 0)
+            optionSwitch = 1;
+        if (strcmp(argv[1], "-i") == 0)
+            optionSwitch = -1;
+    }
+
+    // last will be color, second to last will be tint value.
+    colorString = argv[argc - 1];
+    tintValue = atoi(argv[argc -2]);
 
     for (i = 0; colorString[i] != 0; i++)
     {
@@ -65,9 +63,10 @@ int main(int argc, char *argv[])
             default: index = -1; break;
         }
 
-        original = index;
         if (index != -1)
         {
+            original = index;
+
             index += tintValue;
 
             while(index < 0)
@@ -75,13 +74,14 @@ int main(int argc, char *argv[])
 
             index = index % 16;
 
-            strcpy(limitCompare, "upper");
-            if(strcmp(limit, limitCompare) == 0 && index < original)
-                index = 15;
-
-            strcpy(limitCompare, "lower");
-            if(strcmp(limit, limitCompare) == 0 && original < index)
-                index = 0;
+            // limit
+            if (optionSwitch == 1)
+            {
+                if (tintValue > 0 && index < original)
+                    index = 15;
+                else if (tintValue < 0 && original < index)
+                    index = 0;
+            }
 
             colorString[i] = colorValues[index];
         }
