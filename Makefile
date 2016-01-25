@@ -6,8 +6,9 @@ all:
 debug:
 	cc colort.c -o colort -g
 
-uninstall: colort
+uninstall:
 	rm -f $(DESTDIR)$(prefix)/bin/colort
 
-install: colort
+install:
+	mkdir -p $(DESTDIR)$(prefix)/bin
 	install -m 0755 colort $(DESTDIR)$(prefix)/bin
