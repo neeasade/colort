@@ -13,7 +13,7 @@ command                          | output
 
 
 ### Notes:
-- The color is assumed to be the last 6 chars of the input string.
+- The color is assumed to be the last 6 chars of the input string (can be changed with `-s`)
 - The `-l` flag limits color tinting by not letting values roll around.
 - The `-i` flag inverts colors.
 - The `-s` selects the index in the input string to start getting color from.
