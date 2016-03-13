@@ -107,9 +107,9 @@ int main(int argc, char *argv[])
             }
             else
             {
-                makeValid(red);
-                makeValid(green);
-                makeValid(blue);
+                red   = makeValid(red);
+                green = makeValid(green);
+                blue  = makeValid(blue);
             }
             break;
 

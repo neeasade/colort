@@ -2,13 +2,14 @@
 
 A small program for 'tinting' colors by values. Also supports inverting colors.
 
-command                 | output
-------------------------|-------
-`colort 1 "#000000"`    | `#010101`
-`colort -l 1 "#FFFFFF"` | `#FFFFFF`
-`colort -i "#000000"`   | `#FFFFFF`
-`colort 60 "#000000"`   | `#3C3C3C`
-`colort -60 "#000000"`  |  bug, -6 gets interpreted as option.
+command                   | output
+--------------------------|-------
+`colort 1 "#000000"`      | `#010101`
+`colort -l 1 "#FFFFFF"`   | `#FFFFFF`
+`colort -i "#000000"`     | `#FFFFFF`
+`colort 60 "#000000"`     | `#3C3C3C`
+`colort -60 "#000000"`    |  fails, -6 gets interpreted as option.
+`colort -- -60 "#000000"` |  `#C3C3C3` the `--` escapes future dashes.
 
 
 ### Notes:
