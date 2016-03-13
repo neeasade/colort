@@ -58,16 +58,28 @@ int main(int argc, char *argv[])
     long red, blue, green;
     red = blue = green = 0;
 
+    char negativeTintInput[10] = "          ";
+    int negativeIndex = 0;
+
     // -l (limit), -i (invert)
-    while ((i = getopt  (argc, argv, "lis:")) != -1)
+    while ((i = getopt  (argc, argv, ":lis:")) != -1)
         switch(i)
         {
             case 'l': optionSwitch =  1; break;
             case 'i': optionSwitch = -1; break;
             case 's': index = atoi(optarg); break;
             case '?':
-                      // todo: handle negative numbers via hacky parsing here.
-                      break;
+              switch(optopt)
+              {
+                  // wew lad
+                  case '1': case '2': case '3': case '4': case '5':
+                  case '6': case '7': case '8': case '9': case '0':
+                      negativeTintInput[negativeIndex] = optopt;
+                      negativeIndex++;
+                  break;
+                  default: break;
+              }
+              break;
             default: abort();
         }
 
@@ -75,11 +87,20 @@ int main(int argc, char *argv[])
     switch(optionSwitch)
     {
         case 0: // normal
-            if (argv[optind] == NULL || argv[optind + 1] == NULL)
-                usage();
-            tintValue = atoi(argv[optind]);
+        case 1: // limit
+            if (!negativeIndex)
+                if (argv[optind] == NULL || argv[optind + 1] == NULL)
+                    usage();
 
-        case  1: // limit
+            if (negativeIndex)
+                if (argv[optind] == NULL)
+                    usage();
+
+            if (negativeIndex)
+                tintValue = -1 * atoi(negativeTintInput);
+            else
+                tintValue = atoi(argv[optind]);
+
         case -1: // invert
             if (argv[optind] == NULL)
                 usage();
