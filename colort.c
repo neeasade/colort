@@ -45,9 +45,9 @@ void limit(long *input)
 void makeValid(long *input)
 {
     while(*input < 0)
-        *input += 255;
+        *input += 256;
 
-    *input = *input % 255;
+    *input = *input % 256;
 }
 
 int main(int argc, char *argv[])
