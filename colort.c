@@ -6,8 +6,8 @@
 long hexToDec(char*,int,int);
 void decToHex(long,char*);
 void usage();
-void limit(long*);
-void makeValid(long*);
+long limit(long);
+long makeValid(long);
 
 void usage()
 {
@@ -30,16 +30,16 @@ void decToHex(long value, char* destination)
 }
 
 // make a color valid without rotating.
-void limit(long *input)
+long limit(long input)
 {
-    if (*input > 255)
-        *input = 255;
-    else if(*input < -1)
-        *input = 0;
+    if (input > 255)
+        return 255;
+    else if(input < -1)
+        return 0;
 }
 
 // make a color valid post rotating.
-void makeValid(long *input)
+long makeValid(long input)
 {
     // todo
 }
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     int i, index, tintValue, original, optionSwitch;
     i = index = tintValue = original = optionSwitch = 0;
     char *colorString, *inputString;
-    long *red, *blue, *green;
+    long red, blue, green;
     red = blue = green = 0;
 
     // -l (limit), -i (invert)
@@ -80,12 +80,12 @@ int main(int argc, char *argv[])
     // last will be color/input string, always required.
     // assume that the color will be in the last 6 characters of the string.
     inputString = argv[argc - 1];
-    colorString = &colorString[strlen(colorString)-6];
+    colorString = &inputString[strlen(inputString)-6];
 
     // parse
-    *red   = hexToDec(colorString, 0, 1);
-    *green = hexToDec(colorString, 2, 3);
-    *blue  = hexToDec(colorString, 4, 5);
+    red   = hexToDec(colorString, 0, 1);
+    green = hexToDec(colorString, 2, 3);
+    blue  = hexToDec(colorString, 4, 5);
 
     // act
     switch(optionSwitch)
@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
 
             if (optionSwitch)
             {
-                limit(red);
-                limit(green);
-                limit(blue);
+                red   = limit(red);
+                green = limit(green);
+                blue  = limit(blue);
             }
             else
             {
@@ -111,9 +111,9 @@ int main(int argc, char *argv[])
             break;
 
         case -1:
-            *red   = 255 - *red;
-            *green = 255 - *green;
-            *blue  = 255 - *blue;
+            red   = 255 - red;
+            green = 255 - green;
+            blue  = 255 - blue;
     }
 
     printf("%s\n", colorString);
