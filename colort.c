@@ -1,89 +1,119 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
+long hexToDec(char*,int,int);
+void decToHex(long,char*);
+void usage();
+void limit(long*);
+void makeValid(long*);
+
+void usage()
+{
+    // ehhh
+    printf("%s", "usage: colort ([-l] <value> <color> | -i <color>)\n");
+    exit(1);
+}
+
+// convert hexidecimal to character, eg ff -> 255.
+long hexToDec(char *input, int start, int end)
+{
+    char hex[3] = {input[start], input[end], '\0'};
+    return strtol(hex, NULL, 16);
+}
+
+// convert deximal to hex char.
+void decToHex(long value, char* destination)
+{
+    // todo
+}
+
+// make a color valid without rotating.
+void limit(long *input)
+{
+    if (*input > 255)
+        *input = 255;
+    else if(*input < -1)
+        *input = 0;
+}
+
+// make a color valid post rotating.
+void makeValid(long *input)
+{
+    // todo
+}
 
 int main(int argc, char *argv[])
 {
-    int i=0;
-    int index = 0;
-    int tintValue = 0;
-    int original = 0;
-    char *colorValues="0123456789abcdef";
-    char *colorString;
+    int i, index, tintValue, original, optionSwitch;
+    i = index = tintValue = original = optionSwitch = 0;
+    char *colorString, *inputString;
+    long *red, *blue, *green;
+    red = blue = green = 0;
 
-    // 1 for -l (limit), -1 for -i (invert)
-    int optionSwitch=0;
+    // -l (limit), -i (invert)
+    while ((i = getopt  (argc, argv, "l:i")) != -1)
+        switch(i)
+        {
+            case 'l': optionSwitch =  1; tintValue = atoi(optarg); break;
+            case 'i': optionSwitch = -1; break;
+            default: abort();
+        }
 
-    // you're not going to specify -i and -l
-    if (argc == 4){
-        if (strcmp(argv[1], "-l") == 0)
-            optionSwitch = 1;
-        if (strcmp(argv[1], "-i") == 0)
-            optionSwitch = -1;
+    // validate required args based on options.
+    switch(optionSwitch)
+    {
+        case 0: // normal
+            if (argv[optind] == NULL || argv[optind + 1] == NULL)
+                usage();
+            tintValue = atoi(argv[optind]);
+
+        case  1: // limit
+        case -1: // invert
+            if (argv[optind] == NULL)
+                usage();
+
+        default: break;
     }
 
-    // last will be color, second to last will be tint value.
-    colorString = argv[argc - 1];
-    tintValue = atoi(argv[argc -2]);
+    // last will be color/input string, always required.
+    // assume that the color will be in the last 6 characters of the string.
+    inputString = argv[argc - 1];
+    colorString = &colorString[strlen(colorString)-6];
 
-    for (i = 0; colorString[i] != 0; i++)
+    // parse
+    *red   = hexToDec(colorString, 0, 1);
+    *green = hexToDec(colorString, 2, 3);
+    *blue  = hexToDec(colorString, 4, 5);
+
+    // act
+    switch(optionSwitch)
     {
-        switch(colorString[i])
-        {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9': index = colorString[i] - '0'; break;
+        case 0:
+        case 1:
+            red   += tintValue;
+            green += tintValue;
+            blue  += tintValue;
 
-            case 'a':
-            case 'A': index = 10; break;
-
-            case 'b':
-            case 'B': index = 11; break;
-
-            case 'c':
-            case 'C': index = 12; break;
-
-            case 'd':
-            case 'D': index = 13; break;
-
-            case 'e':
-            case 'E': index = 14; break;
-
-            case 'f':
-            case 'F': index = 15; break;
-
-            default: index = -1; break;
-        }
-
-        if (index != -1)
-        {
-            original = index;
-
-            index += tintValue;
-
-            while(index < 0)
-                index += 16;
-
-            index = index % 16;
-
-            // limit
-            if (optionSwitch == 1)
+            if (optionSwitch)
             {
-                if (tintValue > 0 && index < original)
-                    index = 15;
-                else if (tintValue < 0 && original < index)
-                    index = 0;
+                limit(red);
+                limit(green);
+                limit(blue);
             }
+            else
+            {
+                makeValid(red);
+                makeValid(green);
+                makeValid(blue);
+            }
+            break;
 
-            colorString[i] = colorValues[index];
-        }
+        case -1:
+            *red   = 255 - *red;
+            *green = 255 - *green;
+            *blue  = 255 - *blue;
     }
 
     printf("%s\n", colorString);
