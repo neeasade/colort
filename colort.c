@@ -12,7 +12,7 @@ void makeValid(long*);
 void usage()
 {
     // ehhh
-    printf("%s", "usage: colort ([-l] <value> <color> | -i <color>)\n");
+    printf("%s", "usage: colort [-s <index>] ([-l] <value> <color> | -i <color>)\n");
     exit(1);
 }
 
@@ -24,9 +24,12 @@ long hexToDec(char *input, int start, int end)
 }
 
 // convert deximal to hex char.
-void decToHex(long value, char* destination)
+void decToHex(long value, char *destination)
 {
-    snprintf(destination, 16, "%02lX", value);
+    // replace the null char with what should be there.
+    char original = destination[2];
+    sprintf(destination, "%02lX", value);
+    destination[2] = original;
 }
 
 // make a color valid without rotating.
@@ -56,11 +59,15 @@ int main(int argc, char *argv[])
     red = blue = green = 0;
 
     // -l (limit), -i (invert)
-    while ((i = getopt  (argc, argv, "l:i")) != -1)
+    while ((i = getopt  (argc, argv, "lis:")) != -1)
         switch(i)
         {
-            case 'l': optionSwitch =  1; tintValue = atoi(optarg); break;
+            case 'l': optionSwitch =  1; break;
             case 'i': optionSwitch = -1; break;
+            case 's': index = atoi(optarg); break;
+            case '?':
+                      // todo: handle negative numbers via hacky parsing here.
+                      break;
             default: abort();
         }
 
@@ -83,7 +90,11 @@ int main(int argc, char *argv[])
     // last will be color/input string, always required.
     // assume that the color will be in the last 6 characters of the string.
     inputString = argv[argc - 1];
-    colorString = &inputString[strlen(inputString)-6];
+
+    if(!index)
+        index = strlen(inputString) - 6;
+
+    colorString = &inputString[index];
 
     // parse
     red   = hexToDec(colorString, 0, 1);

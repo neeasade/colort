@@ -2,20 +2,22 @@
 
 A small program for 'tinting' colors by values. Also supports inverting colors.
 
-command                   | output
---------------------------|-------
-`colort 1 "#000000"`      | `#010101`
-`colort -l 1 "#FFFFFF"`   | `#FFFFFF`
-`colort -i "#000000"`     | `#FFFFFF`
-`colort 60 "#000000"`     | `#3C3C3C`
-`colort -60 "#000000"`    |  fails, -6 gets interpreted as option.
-`colort -- -60 "#000000"` |  `#C3C3C3` the `--` escapes future dashes.
+command                          | output
+---------------------------------|-------
+`colort 1 "#000000"`             | `#010101`
+`colort -l 1 "#FFFFFF"`          | `#FFFFFF`
+`colort -i "#000000"`            | `#FFFFFF`
+`colort 60 "#000000"`            | `#3C3C3C`
+`colort -60 "#000000"`           |  fails, -6 gets interpreted as option.
+`colort -- -60 "#000000"`        |  `#C3C3C3` the `--` escapes future dashes.
+`colort -s 4 1 "spam000000spam"` |  `spam010101spam`
 
 
 ### Notes:
 - The color is assumed to be the last 6 chars of the input string.
 - The `-l` flag limits color tinting by not letting values roll around.
 - The `-i` flag inverts colors.
+- The `-s` selects the index in the input string to start getting color from.
 - The tint value can be within the set of values supported by a `long` datatype.
 
 
