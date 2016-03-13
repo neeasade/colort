@@ -6,8 +6,8 @@
 long hexToDec(char*,int,int);
 void decToHex(long,char*);
 void usage();
-long limit(long);
-long makeValid(long);
+void limit(long*);
+void makeValid(long*);
 
 void usage()
 {
@@ -30,21 +30,21 @@ void decToHex(long value, char* destination)
 }
 
 // make a color valid without rotating.
-long limit(long input)
+void limit(long *input)
 {
-    if (input > 255)
-        return 255;
-    else if(input < -1)
-        return 0;
+    if (*input > 255)
+        *input = 255;
+    else if(*input < -1)
+        *input = 0;
 }
 
 // make a color valid post rotating.
-long makeValid(long input)
+void makeValid(long *input)
 {
-    while(input < 0)
-        input += 255;
+    while(*input < 0)
+        *input += 255;
 
-    return input % 255;
+    *input = *input % 255;
 }
 
 int main(int argc, char *argv[])
@@ -101,15 +101,15 @@ int main(int argc, char *argv[])
 
             if (optionSwitch)
             {
-                red   = limit(red);
-                green = limit(green);
-                blue  = limit(blue);
+                limit(&red);
+                limit(&green);
+                limit(&blue);
             }
             else
             {
-                red   = makeValid(red);
-                green = makeValid(green);
-                blue  = makeValid(blue);
+                makeValid(&red);
+                makeValid(&green);
+                makeValid(&blue);
             }
             break;
 
