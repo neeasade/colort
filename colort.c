@@ -26,7 +26,7 @@ long hexToDec(char *input, int start, int end)
 // convert deximal to hex char.
 void decToHex(long value, char* destination)
 {
-    snprintf(destination, 16, "%lX", value);
+    snprintf(destination, 16, "%02lX", value);
 }
 
 // make a color valid without rotating.
@@ -41,7 +41,10 @@ long limit(long input)
 // make a color valid post rotating.
 long makeValid(long input)
 {
-    // todo
+    while(input < 0)
+        input += 255;
+
+    return input % 255;
 }
 
 int main(int argc, char *argv[])
