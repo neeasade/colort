@@ -26,7 +26,7 @@ long hexToDec(char *input, int start, int end)
 // convert deximal to hex char.
 void decToHex(long value, char* destination)
 {
-    // todo
+    snprintf(destination, 16, "%lX", value);
 }
 
 // make a color valid without rotating.
@@ -116,6 +116,10 @@ int main(int argc, char *argv[])
             blue  = 255 - blue;
     }
 
-    printf("%s\n", colorString);
+    decToHex(red,   &colorString[0]);
+    decToHex(green, &colorString[2]);
+    decToHex(blue,  &colorString[4]);
+
+    printf("%s\n", inputString);
     return 0;
 }
