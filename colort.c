@@ -5,13 +5,13 @@
 
 long hexToDec(char*,int,int);
 void decToHex(long,char*);
-void usage();
 void limit(long*);
 void makeValid(long*);
+void usage();
 
+// usage
 void usage()
 {
-    // ehhh
     printf("%s", "usage: colort [-s <index>] ([-l] <value> <color> | -i <color>)\n");
     exit(1);
 }
@@ -52,77 +52,59 @@ void makeValid(long *input)
 
 int main(int argc, char *argv[])
 {
-    int i, index, tintValue, original, optionSwitch;
-    i = index = tintValue = original = optionSwitch = 0;
-    char *colorString, *inputString;
+    int i, selectIndex, tintValue, optionSwitch, negativeIndex;
+    i = selectIndex = tintValue = optionSwitch = negativeIndex = 0;
+
     long red, blue, green;
     red = blue = green = 0;
 
+    char *colorString, *inputString;
     char negativeTintInput[10] = "          ";
-    int negativeIndex = 0;
 
-    // -l (limit), -i (invert)
+    // -l (limit), -i (invert), -s (select)
     while ((i = getopt  (argc, argv, ":lis:")) != -1)
         switch(i)
         {
             case 'l': optionSwitch =  1; break;
             case 'i': optionSwitch = -1; break;
-            case 's': index = atoi(optarg); break;
+            case 's': selectIndex = atoi(optarg); break;
             case '?':
-              switch(optopt)
-              {
-                  // wew lad
-                  case '1': case '2': case '3': case '4': case '5':
-                  case '6': case '7': case '8': case '9': case '0':
-                      negativeTintInput[negativeIndex] = optopt;
-                      negativeIndex++;
-                  break;
-                  default: break;
-              }
-              break;
-            default: abort();
+                // here we hand number arguments to a string to parse
+                // because we want to do negative args without escaping (--)
+                switch(optopt)
+                {
+                    case '1': case '2': case '3': case '4': case '5':
+                    case '6': case '7': case '8': case '9': case '0':
+                    negativeTintInput[negativeIndex++] = optopt;
+                    break;
+                    default: abort();
+                }
         }
 
-    // validate required args based on options.
-    switch(optionSwitch)
-    {
-        case 0: // normal
-        case 1: // limit
-            if (!negativeIndex)
-                if (argv[optind] == NULL || argv[optind + 1] == NULL)
-                    usage();
+    // always gonna need an input string.
+    if (argv[optind] == NULL)
+        usage();
 
-            if (negativeIndex)
-                if (argv[optind] == NULL)
-                    usage();
+    // if not inverting, need tint value.
+    if (optionSwitch != -1 && !negativeIndex)
+        if (argv[optind] == NULL || argv[optind + 1] == NULL)
+            usage();
 
-            if (negativeIndex)
-                tintValue = -1 * atoi(negativeTintInput);
-            else
-                tintValue = atoi(argv[optind]);
-
-        case -1: // invert
-            if (argv[optind] == NULL)
-                usage();
-
-        default: break;
-    }
-
-    // last will be color/input string, always required.
-    // assume that the color will be in the last 6 characters of the string.
+    tintValue = negativeIndex ?  -1 * atoi(negativeTintInput) : atoi(argv[optind]);
     inputString = argv[argc - 1];
 
-    if(!index)
-        index = strlen(inputString) - 6;
+    // default to last 6 characters.
+    if(!selectIndex)
+        selectIndex = strlen(inputString) - 6;
 
-    colorString = &inputString[index];
+    colorString = &inputString[selectIndex];
 
     // parse
     red   = hexToDec(colorString, 0, 1);
     green = hexToDec(colorString, 2, 3);
     blue  = hexToDec(colorString, 4, 5);
 
-    // act
+    // do the thing
     switch(optionSwitch)
     {
         case 0:
@@ -151,6 +133,7 @@ int main(int argc, char *argv[])
             blue  = 255 - blue;
     }
 
+    // insert result
     decToHex(red,   &colorString[0]);
     decToHex(green, &colorString[2]);
     decToHex(blue,  &colorString[4]);

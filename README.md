@@ -8,7 +8,7 @@ command                          | output
 `colort -l 1 "#FFFFFF"`          | `#FFFFFF`
 `colort -i "#000000"`            | `#FFFFFF`
 `colort 60 "#000000"`            | `#3C3C3C`
-`colort -60 "#000000"`           |  `#C3C3C3`
+`colort -60 "#000000"`           |  `#C4C4C4`
 `colort -s 4 1 "spam000000spam"` |  `spam010101spam`
 
 
