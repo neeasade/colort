@@ -1,0 +1,61 @@
+.Dd March 14, 2016
+.Dt colort 1
+.Os
+.Sh NAME
+.Nm colort
+.Nd tint color values
+.Sh SYNOPSIS
+.Nm
+.Op Fl l | Fl i | Fl s Ar index
+.Ar value
+.Ar color
+.Sh DESCRIPTION
+.Nm
+is a color manipulation tool for tinting and
+altering the values of a given color.
+
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl l
+Limit tinting without rolling over
+(e.g. subtracting from #000000 will not
+roll into #FFFFFF).
+.It Fl i
+Invert the
+.Ar color
+(e.g. #000000 becomes #FFFFFF).
+.It Fl s Ar index
+If
+.Ar color
+contains miscellaneous text,
+.Ar index
+specifies the first character of
+a color value.
+.It Ar value
+An amount to tint the
+.Ar color
+value. Positive values brighten it.
+Negative values darken it.
+.It Ar color
+A hexadecimal color value (e.g. #FF0000, red).
+.El
+.Sh EXAMPLES
+.Bd -unfilled
+$ colort 1 "#000000"
+#010101
+
+$ colort -l 1 "#FFFFFF"
+#FFFFFF
+
+$ colort -i "#000000"
+#FFFFFF
+
+$ colort 60 "$000000"
+#3C3C3C
+
+$ colort -60 "#000000"
+#C3C3C3
+
+$ colort -s 4 1 "spam000000spam"
+spam010101spam
+.Ed
