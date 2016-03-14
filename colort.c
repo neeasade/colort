@@ -37,7 +37,7 @@ void limit(long *input)
 {
     if (*input > 255)
         *input = 255;
-    else if(*input < -1)
+    else if (*input < -1)
         *input = 0;
 }
 
@@ -58,15 +58,21 @@ int main(int argc, char *argv[])
     long red, blue, green;
     red = blue = green = 0;
 
+    int enableRed, enableBlue, enableGreen;
+    enableRed = enableBlue = enableGreen = 0;
+
     char *colorString, *inputString;
     char negativeTintInput[10] = "          ";
 
     // -l (limit), -i (invert), -s (select)
-    while ((i = getopt  (argc, argv, ":lis:")) != -1)
+    while ((i = getopt  (argc, argv, ":rgblis:")) != -1)
         switch(i)
         {
             case 'l': optionSwitch =  1; break;
             case 'i': optionSwitch = -1; break;
+            case 'r': enableRed = 1; break;
+            case 'g': enableGreen = 1; break;
+            case 'b': enableBlue = 1; break;
             case 's': selectIndex = atoi(optarg); break;
             case '?':
                 // here we hand number arguments to a string to parse
@@ -90,11 +96,14 @@ int main(int argc, char *argv[])
         if (argv[optind] == NULL || argv[optind + 1] == NULL)
             usage();
 
+    if (!enableRed && !enableGreen && !enableBlue)
+        enableRed = enableGreen = enableBlue = 1;
+
     tintValue = negativeIndex ?  -1 * atoi(negativeTintInput) : atoi(argv[optind]);
     inputString = argv[argc - 1];
 
     // default to last 6 characters.
-    if(!selectIndex)
+    if (!selectIndex)
         selectIndex = strlen(inputString) - 6;
 
     colorString = &inputString[selectIndex];
@@ -133,10 +142,13 @@ int main(int argc, char *argv[])
             blue  = 255 - blue;
     }
 
-    // insert result
-    decToHex(red,   &colorString[0]);
-    decToHex(green, &colorString[2]);
-    decToHex(blue,  &colorString[4]);
+    // insert result if enabled
+    if (enableRed)
+        decToHex(red,   &colorString[0]);
+    if (enableGreen)
+        decToHex(green, &colorString[2]);
+    if (enableBlue)
+        decToHex(blue,  &colorString[4]);
 
     printf("%s\n", inputString);
     return 0;
