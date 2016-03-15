@@ -45,7 +45,7 @@ void limit(long *input)
 void makeValid(long *input)
 {
     while(*input < 0)
-        *input += 256;
+          *input += 256;
 
     *input = *input % 256;
 }
@@ -70,10 +70,10 @@ int main(int argc, char *argv[])
         {
             case 'l': optionSwitch =  1; break;
             case 'i': optionSwitch = -1; break;
-            case 'r': enableRed = 1; break;
-            case 'g': enableGreen = 1; break;
-            case 'b': enableBlue = 1; break;
-            case 's': selectIndex = atoi(optarg); break;
+            case 'r': enableRed    =  1; break;
+            case 'g': enableGreen  =  1; break;
+            case 'b': enableBlue   =  1; break;
+            case 's': selectIndex  =  atoi(optarg); break;
             case '?':
                 // here we hand number arguments to a string to parse
                 // because we want to do negative args without escaping (--)
@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
                 {
                     case '1': case '2': case '3': case '4': case '5':
                     case '6': case '7': case '8': case '9': case '0':
-                    negativeTintInput[negativeIndex++] = optopt;
-                    break;
+                        negativeTintInput[negativeIndex++] = optopt;
+                        break;
                     default: abort();
                 }
         }
@@ -97,14 +97,14 @@ int main(int argc, char *argv[])
             usage();
 
     if (!enableRed && !enableGreen && !enableBlue)
-        enableRed = enableGreen = enableBlue = 1;
+         enableRed = enableGreen = enableBlue = 1;
 
     tintValue = negativeIndex ?  -1 * atoi(negativeTintInput) : atoi(argv[optind]);
     inputString = argv[argc - 1];
 
     // default to last 6 characters.
     if (!selectIndex)
-        selectIndex = strlen(inputString) - 6;
+         selectIndex = strlen(inputString) - 6;
 
     colorString = &inputString[selectIndex];
 
