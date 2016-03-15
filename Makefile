@@ -1,4 +1,5 @@
-prefix=/usr/local
+PREFIX=/usr/local
+MANDIR=/usr/share/man
 
 all:
 	cc colort.c -o colort
@@ -7,8 +8,9 @@ debug:
 	cc colort.c -o colort -g
 
 uninstall:
-	rm -f $(DESTDIR)$(prefix)/bin/colort
+	rm -f $(DESTDIR)$(PREFIX)/bin/colort
 
 install:
-	mkdir -p $(DESTDIR)$(prefix)/bin
-	install -m 0755 colort $(DESTDIR)$(prefix)/bin
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	install -m 0755 colort $(DESTDIR)$(PREFIX)/bin
+        install -m 0644 colort.1 $(DESTDIR)$(MANDIR)/man1
