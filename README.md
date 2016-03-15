@@ -10,6 +10,7 @@ command                          | output
 `colort 60 "#000000"`            | `#3C3C3C`
 `colort -60 "#000000"`           |  `#C4C4C4`
 `colort -s 4 1 "spam000000spam"` |  `spam010101spam`
+`colort -r 1 "#000000"`          |  `#010000`
 
 
 ### Notes:
@@ -17,6 +18,7 @@ command                          | output
 - The `-l` flag limits color tinting by not letting values roll around.
 - The `-i` flag inverts colors.
 - The `-s` selects the index in the input string to start getting color from.
+- If the -r, -g, or -b flags are used, red, green, or blue are affected by the operation respectively. 
 - The tint value can be within the set of values supported by a `long` datatype.
 
 
