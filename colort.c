@@ -145,11 +145,7 @@ int main(int argc, char *argv[])
 
         case 2: // contrast - ref: https://24ways.org/2010/calculating-color-contrast/
             yiq = ((red * 299) + (green * 587) + (blue * 114)) / 1000;
-            if (yiq >= 128)
-                exit(1);
-            else
-                exit(0);
-            break;
+            exit(yiq >= 128 ? 1 : 0);
     }
 
     // insert result if enabled
