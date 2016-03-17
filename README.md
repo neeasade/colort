@@ -24,6 +24,30 @@ command                          | output
 - The tint value can be within the set of values supported by a `long` datatype.
 
 
+### Example use cases:
+
+Invert a background color to have readable text on any background:
+
+![1](https://u.teknik.io/nS1O3.png) | ![2](https://u.teknik.io/jHTr9.png) | ![3](https://u.teknik.io/JLLZ2.png)
+------------------------------------|-------------------------------------|------------------------------------
+
+Auto-determine select and icon colors for GTK themes based on the background (using oomox and acyl in these examples)
+- `Select_color="$(colort -c "$BG" && colort 25 "$BG" || colort -25 "$BG")"`
+	- If the background contrast is 'dark', tint up, else tint down.
+- `Icon_color="$(colort -c "$BG" && colort -l 80 "$BG" || colort -l -80 "$BG")"`
+	- the same logic, but tinted further to make icons more bold, and a flag to top out at white or black.
+
+![1](https://u.teknik.io/d90oe.png) | ![2](https://u.teknik.io/TQjth.png) | ![3](https://u.teknik.io/5rUdv.png)
+------------------------------------|-------------------------------------|------------------------------------
+
+If for some reason we wanted everything to have a blue tint, we can wrap both the above calls with a `colort -b 40`:
+
+![1](https://u.teknik.io/TcvZm.png) | ![2](https://u.teknik.io/EVX9y.png) | ![3](https://u.teknik.io/swKON.png)
+------------------------------------|-------------------------------------|------------------------------------
+
+Input background colors used for the examples: `282828`, `AB4642`, `D8D8D8` from base16 colorsets.
+
+
 ### TODO
 
 - [x] add --upper and --lower flags to set boundries (eg `colort --upper 3 "ffffff" --> ffffff`)
@@ -32,3 +56,6 @@ command                          | output
 	- This would mean color/pattern validation, as currently we just iterate on characters that /could/ be in a color.
 - [x] proper args and usage
 - [x] --invert(-i) option.
+- [ ] consider testing script of some sort
+- [ ] consider being piped too
+- [ ] consider a `-q`(query) flag to just print the color found (would complement pipe)
