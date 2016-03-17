@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-long hexToDec(char*,int,int);
+long hexToDec(char*,int);
 void decToHex(long,char*);
 void limit(long*);
 void makeValid(long*);
@@ -17,16 +17,16 @@ void usage()
 }
 
 // convert hexidecimal to character, eg ff -> 255.
-long hexToDec(char *input, int start, int end)
+long hexToDec(char *input, int index)
 {
-    char hex[3] = {input[start], input[end], '\0'};
+    char hex[2] = {input[index++], input[index]};
     return strtol(hex, NULL, 16);
 }
 
 // convert deximal to hex char.
 void decToHex(long value, char *destination)
 {
-    // replace the null char with what should be there.
+    // sprintf appends terminator by default, so we'll replace with what was prev there.
     char original = destination[2];
     sprintf(destination, "%02lX", value);
     destination[2] = original;
@@ -41,7 +41,7 @@ void limit(long *input)
         *input = 0;
 }
 
-// make a color valid post rotating.
+// make a color valid post tinting.
 void makeValid(long *input)
 {
     while(*input < 0)
@@ -52,8 +52,9 @@ void makeValid(long *input)
 
 int main(int argc, char *argv[])
 {
-    int i, selectIndex, tintValue, optionSwitch, negativeIndex;
-    i = selectIndex = tintValue = optionSwitch = negativeIndex = 0;
+    int i, selectIndex, tintValue, optionSwitch, negativeIndex, yiq;
+    i = yiq = tintValue = optionSwitch = negativeIndex = 0;
+    selectIndex = -1;
 
     long red, blue, green;
     red = blue = green = 0;
@@ -65,11 +66,12 @@ int main(int argc, char *argv[])
     char negativeTintInput[10] = "          ";
 
     // -l (limit), -i (invert), -s (select)
-    while ((i = getopt  (argc, argv, ":rgblis:")) != -1)
+    while ((i = getopt  (argc, argv, ":rgblis:c")) != -1)
         switch(i)
         {
             case 'l': optionSwitch =  1; break;
             case 'i': optionSwitch = -1; break;
+            case 'c': optionSwitch =  2; break;
             case 'r': enableRed    =  1; break;
             case 'g': enableGreen  =  1; break;
             case 'b': enableBlue   =  1; break;
@@ -92,54 +94,62 @@ int main(int argc, char *argv[])
         usage();
 
     // if not inverting, need tint value.
-    if (optionSwitch != -1 && !negativeIndex)
+    if (optionSwitch != -1 && optionSwitch != 2 && !negativeIndex)
         if (argv[optind] == NULL || argv[optind + 1] == NULL)
             usage();
 
+    // default to all colors.
     if (!enableRed && !enableGreen && !enableBlue)
          enableRed = enableGreen = enableBlue = 1;
 
-    tintValue = negativeIndex ?  -1 * atoi(negativeTintInput) : atoi(argv[optind]);
+    // set input and color strings, default to last 6 characters.
     inputString = argv[argc - 1];
-
-    // default to last 6 characters.
-    if (!selectIndex)
+    if (selectIndex != -1)
          selectIndex = strlen(inputString) - 6;
-
     colorString = &inputString[selectIndex];
 
-    // parse
-    red   = hexToDec(colorString, 0, 1);
-    green = hexToDec(colorString, 2, 3);
-    blue  = hexToDec(colorString, 4, 5);
+    // set color handles.
+    red   = hexToDec(colorString, 0);
+    green = hexToDec(colorString, 2);
+    blue  = hexToDec(colorString, 4);
+
+    // set and apply the tint value if we're using it
+    if (optionSwitch != -1 && optionSwitch != 2)
+    {
+        tintValue = negativeIndex ?  -1 * atoi(negativeTintInput) : atoi(argv[optind]);
+        red   += tintValue;
+        green += tintValue;
+        blue  += tintValue;
+    }
 
     // do the thing
     switch(optionSwitch)
     {
-        case 0:
-        case 1:
-            red   += tintValue;
-            green += tintValue;
-            blue  += tintValue;
-
-            if (optionSwitch)
-            {
-                limit(&red);
-                limit(&green);
-                limit(&blue);
-            }
-            else
-            {
-                makeValid(&red);
-                makeValid(&green);
-                makeValid(&blue);
-            }
+        case 0: // normal
+            makeValid(&red);
+            makeValid(&green);
+            makeValid(&blue);
             break;
 
-        case -1:
+        case 1: // limit
+            limit(&red);
+            limit(&green);
+            limit(&blue);
+            break;
+
+        case -1: // invert
             red   = 255 - red;
             green = 255 - green;
             blue  = 255 - blue;
+            break;
+
+        case 2: // contrast - ref: https://24ways.org/2010/calculating-color-contrast/
+            yiq = (red * 299) + (green * 587) + (blue * 114);
+            if (yiq >= 128)
+                exit(1);
+            else
+                exit(0);
+            break;
     }
 
     // insert result if enabled

@@ -8,17 +8,19 @@ command                          | output
 `colort -l 1 "#FFFFFF"`          | `#FFFFFF`
 `colort -i "#000000"`            | `#FFFFFF`
 `colort 60 "#000000"`            | `#3C3C3C`
-`colort -60 "#000000"`           |  `#C4C4C4`
-`colort -s 4 1 "spam000000spam"` |  `spam010101spam`
-`colort -r 1 "#000000"`          |  `#010000`
+`colort -60 "#000000"`           | `#C4C4C4`
+`colort -s 4 1 "spam000000spam"` | `spam010101spam`
+`colort -r 1 "#000000"`          | `#010000`
 
 
 ### Notes:
+
 - The color is assumed to be the last 6 chars of the input string (can be changed with `-s`)
 - The `-l` flag limits color tinting by not letting values roll around.
 - The `-i` flag inverts colors.
 - The `-s` selects the index in the input string to start getting color from.
-- If the -r, -g, or -b flags are used, red, green, or blue are affected by the operation respectively. 
+- The `-c` flag calculates the contrast of the color. If this evaluates to black, exit status 0. If white, exit status 1.
+- If the -r, -g, or -b flags are used, red, green, or blue are affected by the operation respectively.
 - The tint value can be within the set of values supported by a `long` datatype.
 
 
