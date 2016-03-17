@@ -104,8 +104,7 @@ int main(int argc, char *argv[])
 
     // set input and color strings, default to last 6 characters.
     inputString = argv[argc - 1];
-    if (selectIndex != -1)
-         selectIndex = strlen(inputString) - 6;
+    selectIndex = selectIndex == -1 ? strlen(inputString) - 6 : selectIndex;
     colorString = &inputString[selectIndex];
 
     // set color handles.
