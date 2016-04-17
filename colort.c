@@ -52,8 +52,8 @@ void makeValid(long *input)
 
 int main(int argc, char *argv[])
 {
-    int i, selectIndex, tintValue, optionSwitch, negativeIndex, yiq;
-    i = yiq = tintValue = optionSwitch = negativeIndex = 0;
+    int i, selectIndex, tintValue, optionSwitch, negativeIndex, yiq, terse;
+    i = yiq = terse = tintValue = optionSwitch = negativeIndex = 0;
     selectIndex = -1;
 
     long red, blue, green;
@@ -63,10 +63,10 @@ int main(int argc, char *argv[])
     enableRed = enableBlue = enableGreen = 0;
 
     char *colorString, *inputString;
-    char negativeTintInput[10] = "          ";
+    char negativeTintInput[10] = "";
 
     // -l (limit), -i (invert), -s (select)
-    while ((i = getopt  (argc, argv, ":rgblis:c")) != -1)
+    while ((i = getopt  (argc, argv, ":rghbtlis:c")) != -1)
         switch(i)
         {
             case 'l': optionSwitch =  1; break;
@@ -76,6 +76,8 @@ int main(int argc, char *argv[])
             case 'g': enableGreen  =  1; break;
             case 'b': enableBlue   =  1; break;
             case 's': selectIndex  =  atoi(optarg); break;
+            case 'h': usage();
+            case 't': terse = 1; break;
             case '?':
                 // here we hand number arguments to a string to parse
                 // because we want to do negative args without escaping (--)
@@ -85,7 +87,7 @@ int main(int argc, char *argv[])
                     case '6': case '7': case '8': case '9': case '0':
                         negativeTintInput[negativeIndex++] = optopt;
                         break;
-                    default: abort();
+                    default: usage();
                 }
         }
 
@@ -115,7 +117,7 @@ int main(int argc, char *argv[])
     // set and apply the tint value if we're using it
     if (optionSwitch != -1 && optionSwitch != 2)
     {
-        tintValue = negativeIndex ?  -1 * atoi(negativeTintInput) : atoi(argv[optind]);
+        tintValue = negativeIndex ? -1 * atoi(negativeTintInput) : atoi(argv[optind]);
         red   += tintValue;
         green += tintValue;
         blue  += tintValue;
@@ -154,6 +156,13 @@ int main(int argc, char *argv[])
         decToHex(green, &colorString[2]);
     if (enableBlue)
         decToHex(blue,  &colorString[4]);
+
+    // print color only
+    if (terse)
+    {
+        colorString[6] = '\0';
+        inputString = colorString;
+    }
 
     printf("%s\n", inputString);
     return 0;

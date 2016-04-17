@@ -10,6 +10,7 @@ command                          | output
 `colort 60 "#000000"`            | `#3C3C3C`
 `colort -60 "#000000"`           | `#C4C4C4`
 `colort -s 4 1 "spam000000spam"` | `spam010101spam`
+`colort -t -s 4 1 "spam000000spam"` | `010101`
 `colort -r 1 "#000000"`          | `#010000`
 
 
@@ -57,5 +58,5 @@ Input background colors used for the examples: `282828`, `AB4642`, `D8D8D8` from
 - [x] proper args and usage
 - [x] --invert(-i) option.
 - [ ] consider testing script of some sort
-- [ ] consider being piped too
-- [ ] consider a `-q`(query) flag to just print the color found (would complement pipe)
+- [ ] consider accepting input from STDIN
+- [x] consider a `-t`(terse) flag to just print the color found
