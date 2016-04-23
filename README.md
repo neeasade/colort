@@ -2,16 +2,16 @@
 
 A small program for 'tinting' colors by values. Also supports inverting colors.
 
-command                          | output
----------------------------------|-------
-`colort 1 "#000000"`             | `#010101`
-`colort -l 1 "#FFFFFF"`          | `#FFFFFF`
-`colort -i "#000000"`            | `#FFFFFF`
-`colort 60 "#000000"`            | `#3C3C3C`
-`colort -60 "#000000"`           | `#C4C4C4`
-`colort -s 4 1 "spam000000spam"` | `spam010101spam`
+command                             | output
+------------------------------------|-------
+`colort 1 "#000000"`                | `#010101`
+`colort -l 1 "#FFFFFF"`             | `#FFFFFF`
+`colort -i "#000000"`               | `#FFFFFF`
+`colort 60 "#000000"`               | `#3C3C3C`
+`colort -60 "#000000"`              | `#C4C4C4`
+`colort -s 4 1 "spam000000spam"`    | `spam010101spam`
 `colort -t -s 4 1 "spam000000spam"` | `010101`
-`colort -r 1 "#000000"`          | `#010000`
+`colort -r 1 "#000000"`             | `#010000`
 
 
 ### Notes:
@@ -19,7 +19,8 @@ command                          | output
 - The color is assumed to be the last 6 chars of the input string (can be changed with `-s`)
 - The `-l` flag limits color tinting by not letting values roll around.
 - The `-i` flag inverts colors.
-- The `-s` selects the index in the input string to start getting color from.
+- The `-s` flag selects the index in the input string to start getting color from.
+- The `-t` flag makes the output only the color string
 - The `-c` flag calculates the contrast of the color. If this evaluates to black, exit status 0. If white, exit status 1.
 - If the -r, -g, or -b flags are used, red, green, or blue are affected by the operation respectively.
 - The tint value can be within the set of values supported by a `long` datatype.
@@ -51,12 +52,5 @@ Input background colors used for the examples: `282828`, `AB4642`, `D8D8D8` from
 
 ### TODO
 
-- [x] add --upper and --lower flags to set boundries (eg `colort --upper 3 "ffffff" --> ffffff`)
-	- [x] should this be automatic depending on tint direction? it should be.
-- [x] make values be toggled on their own (eg `colort 1 000000 --> 010101`)
-	- This would mean color/pattern validation, as currently we just iterate on characters that /could/ be in a color.
-- [x] proper args and usage
-- [x] --invert(-i) option.
-- [ ] consider testing script of some sort
-- [ ] consider accepting input from STDIN
-- [x] consider a `-t`(terse) flag to just print the color found
+- consider accepting input from STDIN
+- update the man page
