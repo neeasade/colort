@@ -2,13 +2,12 @@
 # test script for args and output
 # needs bash 4+ for associative arrays.
 
-declare -A tests
-
 # target program to test
 target=./colort
+which >/dev/null $target || exit 1
 
 # args, expected output
-tests=(
+declare -A tests=(
 	["1 #000000"]="#010101"
 	["-l 1 #FFFFFF"]="#FFFFFF"
 	["-i #000000"]="#FFFFFF"
@@ -18,12 +17,6 @@ tests=(
 	["-t -s 4 1 spam000000spam"]="010101"
 	["-r 1 000000"]="010000"
 )
-
-# sanity
-if ! which $target; then
-	echo "$target was not found."
-	exit 1
-fi
 
 # do the thing
 for testCase in "${!tests[@]}"; do
