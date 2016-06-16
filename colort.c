@@ -164,6 +164,6 @@ int main(int argc, char *argv[])
         inputString = colorString;
     }
 
-    printf("%s\n", inputString);
+    printf("%s", inputString);
     return 0;
 }
