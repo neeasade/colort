@@ -11,12 +11,14 @@ command                             | output
 `colort -60 "#000000"`              | `#C4C4C4`
 `colort -s 4 1 "spam000000spam"`    | `spam010101spam`
 `colort -t -s 4 1 "spam000000spam"` | `010101`
+`colort -t "ff000000"`              | `000000`
 `colort -r 1 "#000000"`             | `#010000`
 
 
 ### Notes:
 
 - The color is assumed to be the last 6 chars of the input string (can be changed with `-s`)
+- If the tint value is omitted, defaults to 0.
 - The `-l` flag limits color tinting by not letting values roll around.
 - The `-i` flag inverts colors.
 - The `-s` flag selects the index in the input string to start getting color from.
@@ -35,9 +37,9 @@ Invert a background color to have readable text on any background:
 
 Auto-determine select and icon colors for GTK themes based on the background (using oomox and acyl in these examples)
 - `Select_color="$(colort -c "$BG" && colort 25 "$BG" || colort -25 "$BG")"`
-	- If the background contrast is 'dark', tint up, else tint down.
+    - If the background contrast is 'dark', tint up, else tint down.
 - `Icon_color="$(colort -c "$BG" && colort -l 80 "$BG" || colort -l -80 "$BG")"`
-	- the same logic, but tinted further to make icons more bold, and a flag to top out at white or black.
+    - the same logic, but tinted further to make icons more bold, and a flag to top out at white or black.
 
 ![1](https://u.teknik.io/d90oe.png) | ![2](https://u.teknik.io/TQjth.png) | ![3](https://u.teknik.io/5rUdv.png)
 ------------------------------------|-------------------------------------|------------------------------------

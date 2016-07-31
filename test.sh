@@ -16,6 +16,7 @@ declare -A tests=(
 	["-s 4 1 spam000000spam"]="spam010101spam"
 	["-t -s 4 1 spam000000spam"]="010101"
 	["-r 1 000000"]="010000"
+	["-t #ff000000"]="000000"
 )
 
 # do the thing

@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
     // if not inverting, need tint value.
     if (optionSwitch != -1 && optionSwitch != 2 && !negativeIndex)
-        if (argv[optind] == NULL || argv[optind + 1] == NULL)
+        if (argv[optind] == NULL)
             usage();
 
     // default to all colors.
