@@ -58,7 +58,6 @@ int main(int argc, char *argv[])
     long red, blue, green;
     red = blue = green = 0;
 
-
     char *colorString, *inputString;
     char negativeTintInput[10] = "";
 
