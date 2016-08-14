@@ -6,6 +6,7 @@ command                             | output
 ------------------------------------|-------
 `colort 1 "#000000"`                | `#010101`
 `colort -l 1 "#FFFFFF"`             | `#FFFFFF`
+`colort -l 1 "#FFFFFF"`             | `#FFFFFF`, exit status 0
 `colort -i "#000000"`               | `#FFFFFF`
 `colort 60 "#000000"`               | `#3C3C3C`
 `colort -60 "#000000"`              | `#C4C4C4`
@@ -20,6 +21,7 @@ command                             | output
 - The color is assumed to be the last 6 chars of the input string (can be changed with `-s`)
 - If the tint value is omitted, defaults to 0.
 - The `-l` flag limits color tinting by not letting values roll around.
+    - if 2 or more of RGB is limited when this is turned on, exit status of 1.
 - The `-i` flag inverts colors.
 - The `-s` flag selects the index in the input string to start getting color from.
 - The `-t` flag makes the output only the color string

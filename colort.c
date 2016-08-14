@@ -5,7 +5,7 @@
 
 long hexToDec(char*,int);
 void decToHex(long,char*);
-void makeValid(long*,int);
+int makeValid(long*,int);
 void usage();
 
 /* usage */
@@ -32,26 +32,34 @@ void decToHex(long value, char *destination)
 }
 
 /* make a color valid post tinting, limit if enabled. */
-void makeValid(long *input, int limit)
+/* return 1 if limit enabled and limited. */
+int makeValid(long *input, int limit)
 {
     if (limit) {
-        *input = *input > 255 ? 255 :
-                 *input < -1  ? 0   : *input;
+        if (*input > 255) {
+            *input = 255;
+            return 1;
+        } else if (*input < 0) {
+            *input = 0;
+            return 1;
+        }
+        return 0;
     } else {
         while(*input < 0)
               *input += 256;
 
         *input = *input % 256;
+        return 0;
     }
 }
 
 int main(int argc, char *argv[])
 {
     int i, selectIndex, tintValue, optionSwitch, negativeIndex,
-        yiq, terse, enableRed, enableBlue, enableGreen;
+        yiq, terse, enableRed, enableBlue, enableGreen, ret, exitStatus;
 
     i = yiq = terse = tintValue = optionSwitch = negativeIndex =
-        enableRed = enableBlue = enableGreen = 0;
+        enableRed = enableBlue = enableGreen = ret = exitStatus = 0;
 
     selectIndex = -1;
 
@@ -126,9 +134,10 @@ int main(int argc, char *argv[])
 
         case 0: /* normal */
         case 1: /* limit */
-            makeValid(&red,   optionSwitch);
-            makeValid(&green, optionSwitch);
-            makeValid(&blue,  optionSwitch);
+            ret = makeValid(&red,   optionSwitch);
+            ret += makeValid(&green, optionSwitch);
+            ret += makeValid(&blue,  optionSwitch);
+            exitStatus = ret >=2 ? 1 : 0;
             break;
 
         case 2: /* contrast - ref: https://24ways.org/2010/calculating-color-contrast/ */
@@ -151,5 +160,5 @@ int main(int argc, char *argv[])
     }
 
     printf("%s", inputString);
-    return 0;
+    exit(exitStatus);
 }
