@@ -1,11 +1,13 @@
 PREFIX=/usr/local
 MANDIR=/usr/share/man
 
+CC?=cc
+
 all:
-	cc colort.c -o colort
+	$(CC) colort.c -o colort
 
 debug:
-	cc colort.c -o colort -g
+	$(CC) colort.c -o colort -g
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/colort
